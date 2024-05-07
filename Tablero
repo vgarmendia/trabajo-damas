@@ -1,0 +1,34 @@
+
+public class Tablero {
+    private static final String[] CODIGOS = {"A", "B", "C", "D", "E", "F", "G", "H"};
+
+    private Ficha[][] matriz;
+
+    public Tablero() {
+        this.matriz = new Ficha[8][8];
+    }
+
+    public void inicializarTablero() {
+        // Implementación para inicializar el tablero y colocar las fichas
+    }
+
+    public void mostrarTablero() {
+        // Implementación para mostrar el tablero en consola
+    }
+
+    public int contarFichasVolteadas() {
+        int contador = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (matriz[i][j].getEstado()) {
+                    contador++;
+                }
+            }
+        }
+        return contador;
+    }
+
+    public Ficha getFicha(int fila, int columna) {
+        return matriz[fila][columna];
+    }
+}
