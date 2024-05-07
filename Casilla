@@ -1,0 +1,27 @@
+
+public class Ficha {
+    private String codigo;
+    private boolean estado;
+
+    public Ficha(String codigo) {
+        this.codigo = codigo;
+        this.estado = false;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public boolean getEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
+    public void voltearFicha() {
+        this.estado = !this.estado;
+    }
+}
+7
