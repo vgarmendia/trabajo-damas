@@ -1,0 +1,41 @@
+
+
+public class Jugador {
+    private int numero;
+    private int puntaje;
+    private boolean turno;
+
+    public Jugador(int numero) {
+        this.numero = numero;
+        this.puntaje = 0;
+        this.turno = false;
+    }
+
+    public void incrementarPuntaje() {
+        this.puntaje++;
+    }
+
+    public void mostrarPuntaje() {
+        System.out.println("Jugador " + numero + " tiene " + puntaje + " puntos.");
+    }
+
+    public void cambiarTurno() {
+        this.turno = !this.turno;
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public int getPuntaje() {
+        return puntaje;
+    }
+
+    public boolean getTurno() {
+        return turno;
+    }
+
+    public void setTurno(boolean turno) {
+        this.turno = turno;
+    }
+}
