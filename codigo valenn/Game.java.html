@@ -1,0 +1,149 @@
+<html>
+<head>
+<title>Game.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #2aacb8;}
+.s4 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Game.java</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Scanner</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">Game </span><span class="s2">{</span>
+    <span class="s0">private static </span><span class="s1">Game instance</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">Tablero tablero</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">Jugador jugador1</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">Jugador jugador2</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">Ficha ficha1</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">Ficha ficha2</span><span class="s2">;</span>
+
+    <span class="s0">private </span><span class="s1">Game</span><span class="s2">() {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">tablero </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Tablero</span><span class="s2">();</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">jugador1 </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Jugador</span><span class="s2">(</span><span class="s3">1</span><span class="s2">);</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">jugador2 </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Jugador</span><span class="s2">(</span><span class="s3">2</span><span class="s2">);</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">ficha1 </span><span class="s2">= </span><span class="s0">null</span><span class="s2">;</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">ficha2 </span><span class="s2">= </span><span class="s0">null</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public static </span><span class="s1">Game getInstance</span><span class="s2">() {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">instance </span><span class="s2">== </span><span class="s0">null</span><span class="s2">) {</span>
+            <span class="s1">instance </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Game</span><span class="s2">();</span>
+        <span class="s2">}</span>
+        <span class="s0">return </span><span class="s1">instance</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">inicializarJuego</span><span class="s2">() {</span>
+        <span class="s1">tablero</span><span class="s2">.</span><span class="s1">inicializarTablero</span><span class="s2">();</span>
+        <span class="s1">jugador1</span><span class="s2">.</span><span class="s1">setTurno</span><span class="s2">(</span><span class="s0">true</span><span class="s2">);</span>
+        <span class="s1">jugador2</span><span class="s2">.</span><span class="s1">setTurno</span><span class="s2">(</span><span class="s0">false</span><span class="s2">);</span>
+        <span class="s1">mostrarTurno</span><span class="s2">(</span><span class="s1">jugador1</span><span class="s2">);</span>
+        <span class="s1">inicializarFichaPorTurno</span><span class="s2">();</span>
+        <span class="s1">tablero</span><span class="s2">.</span><span class="s1">mostrarTablero</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">jugar</span><span class="s2">(</span><span class="s0">int </span><span class="s1">fila</span><span class="s2">, </span><span class="s0">int </span><span class="s1">columna</span><span class="s2">) {</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">verificarFueElegida</span><span class="s2">(</span><span class="s1">ficha1</span><span class="s2">)) {</span>
+            <span class="s1">ficha1 </span><span class="s2">= </span><span class="s1">elegirFicha</span><span class="s2">(</span><span class="s1">fila</span><span class="s2">, </span><span class="s1">columna</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s1">ficha2 </span><span class="s2">= </span><span class="s1">elegirFicha</span><span class="s2">(</span><span class="s1">fila</span><span class="s2">, </span><span class="s1">columna</span><span class="s2">);</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">compararFicha</span><span class="s2">(</span><span class="s1">ficha1</span><span class="s2">, </span><span class="s1">ficha2</span><span class="s2">)) {</span>
+                <span class="s1">actualizarPuntuacion</span><span class="s2">(</span><span class="s1">compararTurnos</span><span class="s2">(</span><span class="s1">jugador1</span><span class="s2">, </span><span class="s1">jugador2</span><span class="s2">));</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">verificarFinDeJuego</span><span class="s2">(</span><span class="s1">tablero</span><span class="s2">)) {</span>
+                    <span class="s1">finalizarJuego</span><span class="s2">();</span>
+                <span class="s2">}</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">alternarTurno</span><span class="s2">();</span>
+                <span class="s1">tablero</span><span class="s2">.</span><span class="s1">mostrarTablero</span><span class="s2">();</span>
+            <span class="s2">}</span>
+            <span class="s1">inicializarFichaPorTurno</span><span class="s2">();</span>
+            <span class="s1">mostrarTurno</span><span class="s2">(</span><span class="s1">compararTurnos</span><span class="s2">(</span><span class="s1">jugador1</span><span class="s2">, </span><span class="s1">jugador2</span><span class="s2">));</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private </span><span class="s1">Ficha elegirFicha</span><span class="s2">(</span><span class="s0">int </span><span class="s1">fila</span><span class="s2">, </span><span class="s0">int </span><span class="s1">columna</span><span class="s2">) {</span>
+        <span class="s1">Ficha ficha </span><span class="s2">= </span><span class="s1">tablero</span><span class="s2">.</span><span class="s1">getFicha</span><span class="s2">(</span><span class="s1">fila</span><span class="s2">, </span><span class="s1">columna</span><span class="s2">);</span>
+        <span class="s1">ficha</span><span class="s2">.</span><span class="s1">voltearFicha</span><span class="s2">();</span>
+        <span class="s1">tablero</span><span class="s2">.</span><span class="s1">mostrarTablero</span><span class="s2">();</span>
+        <span class="s0">return </span><span class="s1">ficha</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">inicializarFichaPorTurno</span><span class="s2">() {</span>
+        <span class="s1">ficha1 </span><span class="s2">= </span><span class="s0">null</span><span class="s2">;</span>
+        <span class="s1">ficha2 </span><span class="s2">= </span><span class="s0">null</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">alternarTurno</span><span class="s2">() {</span>
+        <span class="s1">jugador1</span><span class="s2">.</span><span class="s1">cambiarTurno</span><span class="s2">();</span>
+        <span class="s1">jugador2</span><span class="s2">.</span><span class="s1">cambiarTurno</span><span class="s2">();</span>
+        <span class="s1">ficha1</span><span class="s2">.</span><span class="s1">voltearFicha</span><span class="s2">();</span>
+        <span class="s1">ficha2</span><span class="s2">.</span><span class="s1">voltearFicha</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">actualizarPuntuacion</span><span class="s2">(</span><span class="s1">Jugador jugador</span><span class="s2">) {</span>
+        <span class="s1">jugador</span><span class="s2">.</span><span class="s1">incrementarPuntaje</span><span class="s2">();</span>
+        <span class="s1">jugador</span><span class="s2">.</span><span class="s1">mostrarPuntaje</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private boolean </span><span class="s1">verificarFinDeJuego</span><span class="s2">(</span><span class="s1">Tablero tablero</span><span class="s2">) {</span>
+        <span class="s0">return </span><span class="s1">tablero</span><span class="s2">.</span><span class="s1">contarFichasVolteadas</span><span class="s2">() == </span><span class="s3">24</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">finalizarJuego</span><span class="s2">() {</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s4">&quot;Fin del juego&quot;</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">verificarEmpate</span><span class="s2">(</span><span class="s1">jugador1</span><span class="s2">, </span><span class="s1">jugador2</span><span class="s2">)) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s4">&quot;No hay un ganador, Empate de &quot; </span><span class="s2">+ </span><span class="s1">jugador1</span><span class="s2">.</span><span class="s1">getPuntaje</span><span class="s2">() + </span><span class="s4">&quot; puntos&quot;</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s1">Jugador ganador </span><span class="s2">= </span><span class="s1">verificarGanador</span><span class="s2">(</span><span class="s1">jugador1</span><span class="s2">, </span><span class="s1">jugador2</span><span class="s2">);</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s4">&quot;Ganador: Jugador &quot; </span><span class="s2">+ </span><span class="s1">ganador</span><span class="s2">.</span><span class="s1">getNumero</span><span class="s2">() + </span><span class="s4">&quot; con &quot; </span><span class="s2">+ </span><span class="s1">ganador</span><span class="s2">.</span><span class="s1">getPuntaje</span><span class="s2">() + </span><span class="s4">&quot; puntos&quot;</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private boolean </span><span class="s1">verificarEmpate</span><span class="s2">(</span><span class="s1">Jugador jugador1</span><span class="s2">, </span><span class="s1">Jugador jugador2</span><span class="s2">) {</span>
+        <span class="s0">return </span><span class="s1">jugador1</span><span class="s2">.</span><span class="s1">getPuntaje</span><span class="s2">() == </span><span class="s1">jugador2</span><span class="s2">.</span><span class="s1">getPuntaje</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private </span><span class="s1">Jugador verificarGanador</span><span class="s2">(</span><span class="s1">Jugador jugador1</span><span class="s2">, </span><span class="s1">Jugador jugador2</span><span class="s2">) {</span>
+        <span class="s0">return </span><span class="s1">jugador1</span><span class="s2">.</span><span class="s1">getPuntaje</span><span class="s2">() &gt; </span><span class="s1">jugador2</span><span class="s2">.</span><span class="s1">getPuntaje</span><span class="s2">() ? </span><span class="s1">jugador1 </span><span class="s2">: </span><span class="s1">jugador2</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private </span><span class="s1">Jugador compararTurnos</span><span class="s2">(</span><span class="s1">Jugador jugador1</span><span class="s2">, </span><span class="s1">Jugador jugador2</span><span class="s2">) {</span>
+        <span class="s0">return </span><span class="s1">jugador1</span><span class="s2">.</span><span class="s1">getTurno</span><span class="s2">() ? </span><span class="s1">jugador1 </span><span class="s2">: </span><span class="s1">jugador2</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">mostrarTurno</span><span class="s2">(</span><span class="s1">Jugador jugador</span><span class="s2">) {</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s4">&quot;Turno de Jugador &quot; </span><span class="s2">+ </span><span class="s1">jugador</span><span class="s2">.</span><span class="s1">getNumero</span><span class="s2">());</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private boolean </span><span class="s1">verificarFueElegida</span><span class="s2">(</span><span class="s1">Ficha ficha</span><span class="s2">) {</span>
+        <span class="s0">return </span><span class="s1">ficha </span><span class="s2">!= </span><span class="s0">null</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private boolean </span><span class="s1">compararFicha</span><span class="s2">(</span><span class="s1">Ficha ficha1</span><span class="s2">, </span><span class="s1">Ficha ficha2</span><span class="s2">) {</span>
+        <span class="s0">return </span><span class="s1">ficha1</span><span class="s2">.</span><span class="s1">getCodigo</span><span class="s2">().</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">ficha2</span><span class="s2">.</span><span class="s1">getCodigo</span><span class="s2">());</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public static void </span><span class="s1">main</span><span class="s2">(</span><span class="s1">String</span><span class="s2">[] </span><span class="s1">args</span><span class="s2">) {</span>
+        <span class="s1">Scanner scanner </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Scanner</span><span class="s2">(</span><span class="s1">System</span><span class="s2">.</span><span class="s1">in</span><span class="s2">);</span>
+        <span class="s1">Game juego </span><span class="s2">= </span><span class="s1">Game</span><span class="s2">.</span><span class="s1">getInstance</span><span class="s2">();</span>
+        <span class="s1">juego</span><span class="s2">.</span><span class="s1">inicializarJuego</span><span class="s2">();</span>
+
+        <span class="s0">while </span><span class="s2">(</span><span class="s0">true</span><span class="s2">) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">print</span><span class="s2">(</span><span class="s4">&quot;Ingrese fila y columna: &quot;</span><span class="s2">);</span>
+            <span class="s0">int </span><span class="s1">fila </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextInt</span><span class="s2">();</span>
+            <span class="s0">int </span><span class="s1">columna </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextInt</span><span class="s2">();</span>
+            <span class="s1">juego</span><span class="s2">.</span><span class="s1">jugar</span><span class="s2">(</span><span class="s1">fila</span><span class="s2">, </span><span class="s1">columna</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>
