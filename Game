@@ -1,0 +1,129 @@
+
+import java.util.Scanner;
+
+public class Game {
+    private static Game instance;
+    private Tablero tablero;
+    private Jugador jugador1;
+    private Jugador jugador2;
+    private Ficha ficha1;
+    private Ficha ficha2;
+
+    private Game() {
+        this.tablero = new Tablero();
+        this.jugador1 = new Jugador(1);
+        this.jugador2 = new Jugador(2);
+        this.ficha1 = null;
+        this.ficha2 = null;
+    }
+
+    public static Game getInstance() {
+        if (instance == null) {
+            instance = new Game();
+        }
+        return instance;
+    }
+
+    public void inicializarJuego() {
+        tablero.inicializarTablero();
+        jugador1.setTurno(true);
+        jugador2.setTurno(false);
+        mostrarTurno(jugador1);
+        inicializarFichaPorTurno();
+        tablero.mostrarTablero();
+    }
+
+    public void jugar(int fila, int columna) {
+        if (!verificarFueElegida(ficha1)) {
+            ficha1 = elegirFicha(fila, columna);
+        } else {
+            ficha2 = elegirFicha(fila, columna);
+            if (compararFicha(ficha1, ficha2)) {
+                actualizarPuntuacion(compararTurnos(jugador1, jugador2));
+                if (verificarFinDeJuego(tablero)) {
+                    finalizarJuego();
+                }
+            } else {
+                alternarTurno();
+                tablero.mostrarTablero();
+            }
+            inicializarFichaPorTurno();
+            mostrarTurno(compararTurnos(jugador1, jugador2));
+        }
+    }
+
+    private Ficha elegirFicha(int fila, int columna) {
+        Ficha ficha = tablero.getFicha(fila, columna);
+        ficha.voltearFicha();
+        tablero.mostrarTablero();
+        return ficha;
+    }
+
+    private void inicializarFichaPorTurno() {
+        ficha1 = null;
+        ficha2 = null;
+    }
+
+    private void alternarTurno() {
+        jugador1.cambiarTurno();
+        jugador2.cambiarTurno();
+        ficha1.voltearFicha();
+        ficha2.voltearFicha();
+    }
+
+    private void actualizarPuntuacion(Jugador jugador) {
+        jugador.incrementarPuntaje();
+        jugador.mostrarPuntaje();
+    }
+
+    private boolean verificarFinDeJuego(Tablero tablero) {
+        return tablero.contarFichasVolteadas() == 24;
+    }
+
+    private void finalizarJuego() {
+        System.out.println("Fin del juego");
+        if (verificarEmpate(jugador1, jugador2)) {
+            System.out.println("No hay un ganador, Empate de " + jugador1.getPuntaje() + " puntos");
+        } else {
+            Jugador ganador = verificarGanador(jugador1, jugador2);
+            System.out.println("Ganador: Jugador " + ganador.getNumero() + " con " + ganador.getPuntaje() + " puntos");
+        }
+    }
+
+    private boolean verificarEmpate(Jugador jugador1, Jugador jugador2) {
+        return jugador1.getPuntaje() == jugador2.getPuntaje();
+    }
+
+    private Jugador verificarGanador(Jugador jugador1, Jugador jugador2) {
+        return jugador1.getPuntaje() > jugador2.getPuntaje() ? jugador1 : jugador2;
+    }
+
+    private Jugador compararTurnos(Jugador jugador1, Jugador jugador2) {
+        return jugador1.getTurno() ? jugador1 : jugador2;
+    }
+
+    private void mostrarTurno(Jugador jugador) {
+        System.out.println("Turno de Jugador " + jugador.getNumero());
+    }
+
+    private boolean verificarFueElegida(Ficha ficha) {
+        return ficha != null;
+    }
+
+    private boolean compararFicha(Ficha ficha1, Ficha ficha2) {
+        return ficha1.getCodigo().equals(ficha2.getCodigo());
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Game juego = Game.getInstance();
+        juego.inicializarJuego();
+
+        while (true) {
+            System.out.print("Ingrese fila y columna: ");
+            int fila = scanner.nextInt();
+            int columna = scanner.nextInt();
+            juego.jugar(fila, columna);
+        }
+    }
+}
